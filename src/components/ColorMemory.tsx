@@ -4,6 +4,8 @@ import BgImage from "../assets/mainBg2.jpg";
 import correctAnsSound from "../assets/Sounds/correctAnswer.wav";
 import wrongAnsSound from "../assets/Sounds/wrongAnswer.wav";
 import stamp from "../assets/Stamp.png";
+import Confetti from "./Confetti";
+import Modal from "./Modal";
 const ColorMemoryGame: React.FC = () => {
   // state variables to store the randomly chosen color and user's selected color
 
@@ -15,6 +17,8 @@ const ColorMemoryGame: React.FC = () => {
   const [tries, setTries] = useState(0);
   const [score, setScore] = useState<number>(0);
   const [answer, setAnswer] = useState("");
+  const [showModal, setShowModal] = useState(true);
+
   // array of solid color hex codes to choose from
   const colorOptions: string[] = [
     "bg-red-500",
@@ -79,7 +83,9 @@ const ColorMemoryGame: React.FC = () => {
       }
     }
   };
-
+  function toggle() {
+    setShowModal((prevState) => !prevState);
+  }
   // function to handle when the user clicks the reset button
   function startGame() {
     setshowOptions(true);
@@ -94,6 +100,8 @@ const ColorMemoryGame: React.FC = () => {
 
   return (
     <>
+      {showModal ? <Confetti /> : ""}
+      <Modal showModal={showModal} toggle={toggle} />
       <img
         src={BgImage}
         alt=""
@@ -102,6 +110,7 @@ const ColorMemoryGame: React.FC = () => {
       <div className="flex justify-center">
         <img src={stamp} className={"absolute "} />
       </div>
+
       <div className="items-center flex justify-center h-screen ">
         <div className="text-center text-white space-y-10">
           <div className="font-semibold text-2xl backdrop-blur-md bg-black bg-opacity-30 gap-y-2 h-20 flex justify-center flex-col items-center rounded-lg border-black border-2">
