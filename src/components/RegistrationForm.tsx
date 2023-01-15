@@ -1,28 +1,79 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import Confetti from "./Confetti";
+import {
+  ChangeEvent,
+  FormEvent,
+  forwardRef,
+  MutableRefObject,
+  useState,
+} from "react";
 
-function RegistrationForm() {
-  const [showConfetti, setShowConfetti] = useState(false);
+type props = {
+  Gamescore: number;
+  forwardedRef: MutableRefObject<HTMLButtonElement | null>;
+  startGame: () => void;
+  confettiHandler: () => void;
+};
+function RegistrationForm({
+  Gamescore,
+  forwardedRef,
+  startGame,
+  confettiHandler,
+}: props) {
+  const [showForm, setShowform] = useState(true);
   const [userData, setUserData] = useState({
     name: "",
     contact: "",
     society: "",
     flatNumber: "",
+    GameScore: 0,
   });
   const isFormValid = () => {
     const { name, contact, flatNumber, society } = userData;
+    console.log(userData);
     if (name && contact && flatNumber && society) {
       return true;
     }
     return false;
   };
+
+  // const handleReg = async (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     if (isFormValid()) {
+  //       console.log("Im in");
+  //       const requestOptions = {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(userData),
+  //       };
+  //       const res = await fetch(
+  //         "http://localhost:5000/userReg",
+  //         requestOptions
+  //       );
+  //       console.log(res);
+  //     }
+  //     console.log("I am out");
+  //   } catch (error: any) {
+  //     console.log(error.message);
+  //   }
+  // };
+  const handleFormVisibility = () => {
+    if (isFormValid()) {
+      setShowform((prev) => !prev);
+      startGame();
+      confettiHandler();
+    }
+  };
   return (
     <>
-      {showConfetti ? <Confetti /> : ""}
-      <div className={`absolute w-full flex justify-center  overflow-auto `}>
+      <div
+        className={`${
+          showForm ? "" : " -translate-y-[80rem] invisible"
+        } absolute w-full flex justify-center  backdrop-blur-[2px] z-40 transition ease-in-out delay-150 duration-700 `}
+      >
         <form
-          className="max-w-lg  bg-gradient-to-tr from-[#ccecff] via-[#82d5ff] to-[#ccecff] rounded p-10"
+          className="max-w-lg  bg-gradient-to-tr from-[#ccecff] via-[#82d5ff] to-[#ccecff] rounded p-10 z-40"
           action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSdKfDiLu5fprYhI9Hbhymuf3K7akbZ7QUdbhlXieSzyZnMQrQ/formResponse"
+          // onSubmit={(e: React.SyntheticEvent) => handleReg(e)}
         >
           <div className="text-center  mb-5 text-3xl italic font-Game">
             Country Delight's Color Memorization Game
@@ -177,20 +228,37 @@ function RegistrationForm() {
                   name="entry.2108872300"
                   placeholder="Ex- 90F1"
                   required={true}
-                  // onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  //   setUserData({ ...userData, flatNumber: e.target.value })
-                  // }
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setUserData({ ...userData, flatNumber: e.target.value })
+                  }
+                />
+              </label>
+            </div>
+            <p className="italic text-gray-800 text-sm ml-4 mb-4 items-center">
+              *Your game score will be automatically applied after you play*
+            </p>
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <label
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                htmlFor="entry.1423849770"
+              >
+                Your Game Score
+                <input
+                  className="appearance-none block w-full  text-gray-400 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mt-2"
+                  id="grid-zip"
+                  type="text"
+                  name="entry.1423849770"
+                  value={Gamescore}
+                  placeholder=""
                 />
               </label>
             </div>
           </div>
+
           <div className="w-full flex justify-end mt-5">
-            <button
-              type="submit"
-              onClick={() => {
-                isFormValid() ? setShowConfetti(true) : "";
-              }}
-              className="bg-gradient-to-tr from-[#0066a1] via-[#067ebb] to-[#0066a1] text-white rounded p-2 font-Game flex text-center justify-center w-full"
+            <div
+              className="bg-gradient-to-tr from-[#0066a1] via-[#067ebb] to-[#0066a1] text-white rounded p-2 font-Game flex text-center justify-center w-full cursor-pointer"
+              onClick={() => handleFormVisibility()}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -221,8 +289,13 @@ function RegistrationForm() {
                   d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
                 />
               </svg>
-            </button>
+            </div>
           </div>
+          <button
+            ref={forwardedRef}
+            type="submit"
+            className="invisible"
+          ></button>
         </form>
       </div>
     </>

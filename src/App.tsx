@@ -6,8 +6,8 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/NewGame" element={<ColorMemoryGame />} />
-          <Route path="/" element={<RegistrationForm />}></Route>
+          <Route path="/" element={<ColorMemoryGame />} />
+          {/* <Route path="/" element={<RegistrationForm />}></Route> */}
         </Routes>
       </BrowserRouter>
     </div>
