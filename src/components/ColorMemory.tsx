@@ -52,6 +52,10 @@ const ColorMemoryGame: React.FC = () => {
       setScore((score) => score + 5);
       let correctAudio = new Audio(correctAnsSound);
       correctAudio.play();
+      handleConfetti();
+      // Register after 2 seconds
+
+      RegistrationFormSubmitButtonRef.current?.click();
     } else {
       setAnswer("WRONG!");
       let wrongAudio = new Audio(wrongAnsSound);
@@ -62,7 +66,7 @@ const ColorMemoryGame: React.FC = () => {
         RegistrationFormSubmitButtonRef.current?.click();
         setTimeout(() => {
           startGame();
-          setScore(5);
+          setScore(0);
           setTries(1);
           setshowOptions(true);
         }, 3000);
@@ -78,13 +82,13 @@ const ColorMemoryGame: React.FC = () => {
     generateColorOptions();
     setAnswer("");
   }
-  useEffect(() => {
-    setTimeout(() => {
-      startGame();
-    }, 1500);
-  }, [score]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     startGame();
+  //   }, 1500);
+  // }, [score]);
   function handleConfetti() {
-    setShowConfetti(false);
+    setShowConfetti((prev) => !prev);
   }
   return (
     <>
@@ -102,7 +106,7 @@ const ColorMemoryGame: React.FC = () => {
         Gamescore={score}
         forwardedRef={RegistrationFormSubmitButtonRef}
         startGame={startGame}
-        confettiHandler = {handleConfetti}
+        confettiHandler={handleConfetti}
       />
       <div className="items-center flex justify-center h-screen ">
         <div className="text-center text-white space-y-10">
