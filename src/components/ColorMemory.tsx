@@ -54,23 +54,21 @@ const ColorMemoryGame: React.FC = () => {
       correctAudio.play();
       handleConfetti();
       // Register after 2 seconds
-
-      RegistrationFormSubmitButtonRef.current?.click();
     } else {
       setAnswer("WRONG!");
       let wrongAudio = new Audio(wrongAnsSound);
       wrongAudio.play();
       setTries((prevTrie) => prevTrie - 1);
-      if (tries < 1) {
-        setAnswer("GAMEOVER");
-        RegistrationFormSubmitButtonRef.current?.click();
-        setTimeout(() => {
-          startGame();
-          setScore(0);
-          setTries(1);
-          setshowOptions(true);
-        }, 3000);
-      }
+      RegistrationFormSubmitButtonRef.current?.click();
+      // if (tries < 1) {
+      //   setAnswer("GAMEOVER");
+      //   setTimeout(() => {
+      //     startGame();
+      //     setScore(0);
+      //     setTries(1);
+      //     setshowOptions(true);
+      //   }, 3000);
+      // }
     }
   };
   // function toggle() {
@@ -82,11 +80,14 @@ const ColorMemoryGame: React.FC = () => {
     generateColorOptions();
     setAnswer("");
   }
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     startGame();
-  //   }, 1500);
-  // }, [score]);
+  useEffect(() => {
+    setTimeout(() => {
+      startGame();
+    }, 1500);
+    if (score >= 5) {
+      RegistrationFormSubmitButtonRef.current?.click();
+    }
+  }, [score]);
   function handleConfetti() {
     setShowConfetti((prev) => !prev);
   }
