@@ -12,10 +12,11 @@ const ColorMemoryGame: React.FC = () => {
   const [showOptions, setshowOptions] = useState<boolean>(true);
   // state variable to keep track of the score
   const [colorSetOptions, setColorSetOptions] = useState<string[]>([]);
-  const [tries, setTries] = useState(1);
+  const [tries, setTries] = useState(3);
   const [score, setScore] = useState<number>(0);
   const [answer, setAnswer] = useState("");
   const [showConfetti, setShowConfetti] = useState(true);
+  const [level, setLevel] = useState(1);
   // array of solid color hex codes to choose from
   const colorOptions: string[] = [
     "bg-red-600",
@@ -31,7 +32,7 @@ const ColorMemoryGame: React.FC = () => {
     let answer = colorOptions[Math.floor(Math.random() * colorOptions.length)];
 
     colorOptionArray.push(answer);
-    while (colorOptionArray.length < 3) {
+    while (colorOptionArray.length < level * 2) {
       const randomIndex = Math.floor(Math.random() * colorOptions.length);
       if (colorOptionArray.indexOf(colorOptions[randomIndex]) === -1) {
         colorOptionArray.push(colorOptions[randomIndex]);
@@ -48,27 +49,38 @@ const ColorMemoryGame: React.FC = () => {
   // function to handle when the user selects a color
   const handleColorSelection = (color: string) => {
     if (color === colorSetOptions[0]) {
-      setAnswer("WIN!");
+      if (score > 40) {
+        setAnswer("WINNER!");
+        RegistrationFormSubmitButtonRef.current?.click();
+      } else {
+        setAnswer("CORRECT!");
+      }
       setScore((score) => score + 5);
+      // Check if score is greater than 15 if yes then increase no. of color options.
+      // On every consecutive increase of 15 score level would increase.
+      if (score % 15 === 0) {
+        setLevel((prev) => prev + 1);
+      }
       let correctAudio = new Audio(correctAnsSound);
       correctAudio.play();
-      handleConfetti();
+      // handleConfetti();
       // Register after 2 seconds
     } else {
       setAnswer("WRONG!");
       let wrongAudio = new Audio(wrongAnsSound);
       wrongAudio.play();
-      setTries((prevTrie) => prevTrie - 1);
-      RegistrationFormSubmitButtonRef.current?.click();
-      // if (tries < 1) {
-      //   setAnswer("GAMEOVER");
-      //   setTimeout(() => {
-      //     startGame();
-      //     setScore(0);
-      //     setTries(1);
-      //     setshowOptions(true);
-      //   }, 3000);
-      // }
+      // RegistrationFormSubmitButtonRef.current?.click();
+      if (tries < 1) {
+        setAnswer("GAMEOVER");
+        RegistrationFormSubmitButtonRef.current?.click();
+        setTimeout(() => {
+          startGame();
+          setScore(0);
+          setTries(3);
+          setshowOptions(true);
+        }, 2000);
+      }
+      setTries((prevTry) => prevTry - 1);
     }
   };
   // function toggle() {
@@ -84,7 +96,7 @@ const ColorMemoryGame: React.FC = () => {
     setTimeout(() => {
       startGame();
     }, 1500);
-    if (score >= 5) {
+    if (score >= 45) {
       RegistrationFormSubmitButtonRef.current?.click();
     }
   }, [score]);
@@ -93,7 +105,7 @@ const ColorMemoryGame: React.FC = () => {
   }
   return (
     <>
-      {showConfetti ? <Confetti /> : ""}
+      {/* {showConfetti ? <Confetti /> : ""} */}
 
       <img
         src={BgImage}

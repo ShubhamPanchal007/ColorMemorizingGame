@@ -237,16 +237,16 @@ function RegistrationForm({
             <p className="italic text-gray-800 text-sm ml-4 mb-4 items-center">
               *Your game score will be automatically applied after you play*
             </p>
-            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <div className="w-full  px-3 mb-6 md:mb-0">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="block  uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="entry.1423849770"
               >
-                Your Game Score
                 <input
-                  className="appearance-none block w-full  text-gray-400 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mt-2"
+                  className="appearance-none invisible block w-full  text-gray-400 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mt-2"
                   id="grid-zip"
                   type="text"
+                  readOnly
                   name="entry.1423849770"
                   value={Gamescore}
                   placeholder=""
